@@ -11,6 +11,7 @@ import ptv.services.ms_clients.entity.Passports;
 import ptv.services.ms_clients.repository.ClientsRepository;
 import ptv.services.ms_clients.repository.PassportsRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,13 +53,15 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public List<Clients> getClientsByPassport(String passport) {
 //        System.out.println("passport "+ passport);
+        ArrayList<Clients> All_clients = new ArrayList<>();
         List<Passports> passp = passportsRepository.findByPassportnumber(passport);
-        if(passp.size()>0){  //если номер паспорта найден
-            System.out.println("passport list "+ passp);
-            List<Clients> clients = clientsRepository.findByPassports(passp.get(0));
-            return clients;
-        }else{
-            return null;
+        for (Passports psp:passp) {
+//            System.out.println("passport "+ psp);
+            List<Clients> clients = clientsRepository.findByPassports(psp);
+            if(clients.size()>0){
+                All_clients.add(clients.get(0));
+            }
         }
+        return All_clients;
     }
 }
